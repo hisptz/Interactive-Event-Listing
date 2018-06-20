@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from './store/reducers';
+import { LoadUser } from './store/actions';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app';
+  title = 'EventListing';
+
+  constructor(private store: Store<AppState>) {
+    this.store.dispatch(new LoadUser());
+  }
 }
