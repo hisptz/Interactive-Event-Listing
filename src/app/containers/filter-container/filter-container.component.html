@@ -1,0 +1,42 @@
+<div class="d-flex justify-content-between flex-row-reverse  align-items-end pt-3 pb-2 mb-3">
+  <div class="btn-toolbar col-8 float-right">
+    <div class="d-flex justify-content-around container-fluid">
+      <div class="button-container position-relative">
+        <button class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
+          <span>
+            <img src="assets/icons/period.svg" alt="" srcset=""> Organisation Units:</span> 3 selected
+        </button>
+        <div class="position-absolute filter-host-container" *ngIf="selectedFilter === 'ORG_UNIT'">
+          <!--org unit filter-->
+          <app-org-unit-filter [orgUnitModel]="orgUnitModel" (onOrgUnitClose)="onFilterClose($event)" [isloading]="isFilterSectionLoading$ | async"
+            [justUpdated]="isFilterSectionUpdated$ | async" (onOrgUnitUpdate)="onFilterUpdateAction($event, 'ORG_UNIT')"></app-org-unit-filter>
+          <!--end of org unit filter-->
+        </div>
+      </div>
+      <div class="button-container position-relative">
+        <button class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
+          <span>
+            <img src="assets/icons/period.svg" alt="" srcset=""> Period:</span> This week
+        </button>
+        <div class="position-absolute filter-host-container" *ngIf="selectedFilter === 'PERIOD'">
+          <!--period filter-->
+          <app-period-filter [selectedPeriods]="selectedPeriods" [periodConfig]="periodConfig" (onPeriodFilterClose)="onFilterClose($event)"
+            (onPeriodUpdate)="onFilterUpdateAction($event, 'PERIOD')" [isloading]="isFilterSectionLoading$ | async" [justUpdated]="isFilterSectionUpdated$ | async"></app-period-filter>
+          <!--end of period filter-->
+        </div>
+      </div>
+      <div class="button-container position-relative">
+        <button class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
+          <span>
+            <img src="assets/icons/period.svg" alt="" srcset=""> Data:</span> 3 selected
+        </button>
+        <div class="position-absolute filter-host-container" *ngIf="selectedFilter === 'DATA'">
+          <!--data filter-->
+          <app-data-filter [selectedItems]="selectedDataItems" [singleSelection]="singleSelection" (onDataFilterClose)="onFilterClose($event)"
+            (onDataUpdate)="onFilterUpdateAction($event, 'DATA')" [isloading]="isFilterSectionLoading$ | async" [justUpdated]="isFilterSectionUpdated$ | async"></app-data-filter>
+          <!--end of data filter-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

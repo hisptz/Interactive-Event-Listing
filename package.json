@@ -27,8 +27,13 @@
     "@ngrx/entity": "^6.0.1",
     "@ngrx/store": "^6.0.1",
     "@ngrx/store-devtools": "^6.0.1",
+    "angular-tree-component": "^7.2.0",
+    "bootstrap": "^4.1.1",
     "core-js": "^2.5.4",
+    "ng2-dnd": "^5.0.2",
+    "ng2-dragula": "^1.5.0",
     "ngrx-store-freeze": "^0.2.4",
+    "ngx-pagination": "^3.1.1",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },

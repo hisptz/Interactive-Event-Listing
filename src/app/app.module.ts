@@ -10,12 +10,15 @@ import { reducers, metaReducers } from './store/reducers';
 import { rootEffects } from './store/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import * as filters from './modules';
+import * as fromContainers from './containers';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ...fromContainers.containers],
   imports: [
     BrowserModule,
     HttpClientModule,
+    ...filters.modules,
     /**
      * Module for registering service worker
      */
