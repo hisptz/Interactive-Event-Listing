@@ -13,7 +13,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   availableItems: any[] = [];
   dataGroups: any[] = [];
-  selectedGroup: any = { id: 'ALL', name: '[ All ]' };
+  selectedGroup: any = { id: 'ALL', name: 'All Programs' };
 
   @Output() onDataUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDataFilterClose: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -76,36 +76,37 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   }
 
   initiateData() {
-    this.subscription = this.dataFilterService.initiateData().subscribe(items => {
-      this.dataItems = Object.assign(
-        {},
-        {
-          dataElements: items[0],
-          indicators: items[1],
-          dataElementGroups: items[3],
-          indicatorGroups: items[2],
-          categoryOptions: items[5],
-          dataSets: items[4],
-          programs: items[6],
-          programIndicators: items[7],
-          functions: items[8],
-          dataSetGroups: [
-            { id: '', name: 'Reporting Rate' },
-            { id: '.REPORTING_RATE_ON_TIME', name: 'Reporting Rate on time' },
-            { id: '.ACTUAL_REPORTS', name: 'Actual Reports Submitted' },
-            { id: '.ACTUAL_REPORTS_ON_TIME', name: 'Reports Submitted on time' },
-            { id: '.EXPECTED_REPORTS', name: 'Expected Reports' }
-          ]
-        }
-      );
+    this.subscription = this.dataFilterService.getPrograms().subscribe(results => {
+      const programs = results.map(({ id, name }) => ({ id, name }));
+      const trackedEntityAttributes = results
+        .map(({ id: programid, programTrackedEntityAttributes }) =>
+          programTrackedEntityAttributes.map(({ trackedEntityAttribute }) => ({
+            ...trackedEntityAttribute,
+            name: `[PA] ${trackedEntityAttribute.name}`,
+            programid
+          }))
+        )
+        .reduce((acc, cur) => acc.concat(cur), []);
+      const dataElements = results
+        .map(({ id: programid, programStages }) => {
+          const programstages = programStages
+            .map(({ id: programStageid, programStageDataElements }) => {
+              const prde = programStageDataElements.map(({ dataElement }) => ({
+                ...dataElement,
+                name: `[DE] ${dataElement.name}`,
+                programStageid,
+                programid
+              }));
+              return prde.reduce((acc, cur) => acc.concat(cur), []);
+            })
+            .reduce((acc, cur) => acc.concat(cur), []);
+          return programstages;
+        })
+        .reduce((acc, cur) => acc.concat(cur), []);
+      this.dataItems = { programs, dataElements, trackedEntityAttributes };
       this.loading = false;
       this.dataGroups = this.groupList();
       this.availableItems = this.dataItemList(this._selectedItems, this.selectedGroup);
-
-      // /**
-      //  * Detect changes manually
-      //  */
-      // this.changeDetector.detectChanges();
     });
   }
 
@@ -120,25 +121,17 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   }
 
   getSelectedOption(): any[] {
-    const someArr = [];
-    this.dataFilterOptions.forEach(val => {
-      if (val.selected) {
-        someArr.push(val);
-      }
-    });
-    return _.map(someArr, 'prefix');
+    return this.dataFilterOptions.filter(({ selected }) => selected).map(({ prefix }) => prefix);
   }
 
   // get data Items data_element, indicators, dataSets
   getDataItems() {
-    const dataElements = [];
-    this.dataItems.dataElements.forEach(dataelement => {
-      dataElements.push(...this.getDetailedDataElements(dataelement));
-    });
     return {
-      de: dataElements,
+      de: this.dataItems.dataElements,
       in: this.dataItems.indicators,
       ds: this.dataItems.dataSets,
+      pr: this.dataItems.programs,
+      pa: this.dataItems.trackedEntityAttributes,
       pi: this.dataItems.programIndicators,
       rl: _.flatten(
         _.map(this.dataItems.functions, functionObject =>
@@ -261,14 +254,11 @@ export class DataFilterComponent implements OnInit, OnDestroy {
     // check if program
     if (_.includes(selectedOptions, 'ALL') || _.includes(selectedOptions, 'pr')) {
       if (group.id === 'ALL') {
-        currentList.push(...data.pi);
+        currentList.push(...data.de, ...data.pa);
       } else {
-        if (group.hasOwnProperty('programIndicators')) {
-          const newArray = _.filter(data.pi, indicator => {
-            return _.includes(_.map(group.programIndicators, 'id'), indicator['id']);
-          });
-          currentList.push(...newArray);
-        }
+        const { id } = group;
+        const newArray = [...data.de, ...data.pa].filter(value => value.programid === id);
+        currentList.push(...newArray);
       }
     }
 
@@ -337,7 +327,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
       this.need_groups = false;
     }
 
-    return [{ id: 'ALL', name: '[ All ]' }, ..._.sortBy(currentGroupList, ['name'])];
+    return [..._.sortBy(currentGroupList, ['name'])];
   }
 
   // this will add a selected item in a list function

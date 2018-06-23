@@ -84,8 +84,10 @@ export class DataFilterService {
 
   getPrograms(): Observable<any[]> {
     return this.http
-      .get('programs.json?paging=false&fields=id,name,programType,programIndicators[id,name')
-      .pipe(map(res => res.programs || []));
+      .get(
+        'programs.json?paging=false&fields=id,name,programType,programTrackedEntityAttributes[trackedEntityAttribute[id,displayName~rename(name),valueType,optionSet[id,displayName~rename(name)]]],programStages[id,name,programStageDataElements[dataElement[id,name]]]'
+      )
+      .pipe(map(({ programs }) => programs || []));
   }
 
   getProgramIndicators(): Observable<any[]> {
