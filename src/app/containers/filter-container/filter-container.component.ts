@@ -1,5 +1,8 @@
 import { Component, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs';
+import { LoadAnalytics } from '../../store/actions';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/reducers';
 
 @Component({
   selector: 'app-filter-container',
@@ -29,10 +32,34 @@ export class FilterContainerComponent implements OnChanges {
   };
   @Input() currentUser;
 
-  constructor() {
+  constructor(private store: Store<AppState>) {
     this.selectedFilter = 'DATA';
     this.periodConfig = {};
     this.selectedOrgUnit = [];
+    const today = new Date();
+    const thisyear = today.getFullYear();
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    const thisMonth = today.getMonth();
+    this.selectedPeriods = [
+      {
+        id: thisMonth >= 9 ? `${thisyear}${thisMonth + 1}` : `${thisyear}0${thisMonth + 1}`,
+        name: `${monthNames[thisMonth]} ${thisyear}`,
+        type: 'Monthly'
+      }
+    ];
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -44,17 +71,30 @@ export class FilterContainerComponent implements OnChanges {
   }
 
   onFilterClose(event) {
-    console.log({ event });
+    this.selectedFilter = null;
   }
 
   onFilterUpdateAction(event, type) {
-    console.log({ event, type });
     switch (type) {
       case 'ORG_UNIT':
         this.selectedOrgUnit = event.items || [];
         break;
+      case 'PERIOD':
+        this.selectedPeriods = event.items || [];
+        break;
+      case 'DATA':
+        this.selectedDataItems = event.itemList || [];
+        break;
       default:
         break;
+    }
+    this.selectedFilter = null;
+    const peDxAndOrgSelected =
+      this.selectedDataItems.length && this.selectedPeriods.length && this.selectedOrgUnit.length;
+    if (peDxAndOrgSelected) {
+      this.store.dispatch(
+        new LoadAnalytics({ dx: this.selectedDataItems, pe: this.selectedPeriods, ou: this.selectedOrgUnit })
+      );
     }
   }
 

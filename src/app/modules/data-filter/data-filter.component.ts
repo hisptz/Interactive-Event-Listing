@@ -83,6 +83,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
           programTrackedEntityAttributes.map(({ trackedEntityAttribute }) => ({
             ...trackedEntityAttribute,
             name: `[PA] ${trackedEntityAttribute.name}`,
+            type: 'pa',
             programid
           }))
         )
@@ -94,6 +95,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
               const prde = programStageDataElements.map(({ dataElement }) => ({
                 ...dataElement,
                 name: `[DE] ${dataElement.name}`,
+                type: 'de',
                 programStageid,
                 programid
               }));
