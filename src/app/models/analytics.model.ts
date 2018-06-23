@@ -1,5 +1,7 @@
 export interface Analytics {
-  id: string;
+  headers?: any;
+  rows?: any;
+  data?: any;
 }
 
 export interface FilterSelection {

@@ -5,7 +5,9 @@ export enum AnalyticsActionTypes {
   LoadAnalytics = '[Analytics] Load Analytics',
   LoadAnalyticsFail = '[Analytics] Load Analytics Fail',
   AddAnalytics = '[Analytics] Add Analytics',
-  UpdateAnalytics = '[Analytics] Update Analytics'
+  UpdateAnalytics = '[Analytics] Update Analytics',
+  GenerateTableObject = '[Analytics] Generate Table Object',
+  GenerateTableObjectFail = '[Analytics] Generate Table Object Fail'
 }
 
 export class LoadAnalytics implements Action {
@@ -25,4 +27,21 @@ export class LoadAnalyticsFail implements Action {
   constructor(public error: any) {}
 }
 
-export type AnalyticsActions = LoadAnalytics | AddAnalytics | LoadAnalyticsFail;
+export class GenerateTableObject implements Action {
+  readonly type = AnalyticsActionTypes.GenerateTableObject;
+
+  constructor(public analytics: any) {}
+}
+
+export class GenerateTableObjectFail implements Action {
+  readonly type = AnalyticsActionTypes.GenerateTableObjectFail;
+
+  constructor(public error: any) {}
+}
+
+export type AnalyticsActions =
+  | LoadAnalytics
+  | AddAnalytics
+  | LoadAnalyticsFail
+  | GenerateTableObject
+  | GenerateTableObjectFail;

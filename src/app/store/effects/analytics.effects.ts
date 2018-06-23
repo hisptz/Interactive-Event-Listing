@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { AnalyticsActionTypes, LoadAnalytics, AddAnalytics, LoadAnalyticsFail } from '../actions';
-import { concatMap, map, catchError } from 'rxjs/operators';
+import { AnalyticsActionTypes, LoadAnalytics, AddAnalytics, LoadAnalyticsFail, GenerateTableObject } from '../actions';
+import { concatMap, map, catchError, flatMap } from 'rxjs/operators';
 import { Observable, forkJoin, of } from 'rxjs';
 import { NgxDhis2HttpClientService } from '@hisptz/ngx-dhis2-http-client';
 import { getMergedAnalytics, standardizeIncomingAnalytics } from '../../helpers';
@@ -11,7 +11,7 @@ export class AnalyticsEffects {
   constructor(private actions$: Actions, private http: NgxDhis2HttpClientService) {}
 
   @Effect()
-  loadCurrentUser$: Observable<any> = this.actions$.pipe(
+  loadEventAnalytics$: Observable<any> = this.actions$.pipe(
     ofType(AnalyticsActionTypes.LoadAnalytics),
     map((action: LoadAnalytics) => action.filterSelection),
     concatMap(({ dx, pe, ou }) => {
@@ -31,14 +31,29 @@ export class AnalyticsEffects {
       );
       const queryUrls = this.constructUrl(peValue, ouValue, groupedDx);
       return forkJoin(queryUrls.map(url => this.http.get(url))).pipe(
-        map(
-          analytics =>
-            new AddAnalytics(getMergedAnalytics(analytics.map(analytic => standardizeIncomingAnalytics(analytic))))
-        ),
+        map(analytics => {
+          const arrayToObject = (row, headers) =>
+            Object.assign({}, ...row.map((item, index) => ({ [headers[index].column]: item })));
+          const { rows, headers, metaData } = getMergedAnalytics(
+            analytics.map(analytic => standardizeIncomingAnalytics(analytic))
+          );
+          const mergedAnalytics = {
+            headers: headers.map(header => header.column),
+            data: rows.map(row => arrayToObject(row, headers))
+          };
+          return new AddAnalytics(mergedAnalytics);
+        }),
         catchError((error: any) => of(new LoadAnalyticsFail(error)))
       );
     })
   );
+
+  // @Effect()
+  // generateTableObject$: Observable<any> = this.actions$.pipe(
+  //   ofType(AnalyticsActionTypes.AddAnalytics),
+  //   map((action: AddAnalytics) => action.analytics),
+  //   flatMap(analytics => new GenerateTableObject(analytics))
+  // );
 
   groupBy(array, key) {
     return array.reduce((rv, x) => {
