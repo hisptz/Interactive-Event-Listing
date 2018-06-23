@@ -4,18 +4,21 @@ import { UserActions, UserActionTypes } from '../actions/current-user.actions';
 
 export interface CurrentUserState extends EntityState<User> {
   // additional entities state properties
+  selectedUserId: string;
 }
 
 export const adapter: EntityAdapter<User> = createEntityAdapter<User>();
 
 export const initialState: CurrentUserState = adapter.getInitialState({
   // additional entity state properties
+  selectedUserId: null
 });
 
 export function reducer(state = initialState, action: UserActions): CurrentUserState {
   switch (action.type) {
     case UserActionTypes.AddCurrentUser: {
-      return adapter.addOne(action.currentUser, state);
+      const { id: selectedUserId } = action.currentUser;
+      return adapter.addOne(action.currentUser, { ...state, selectedUserId });
     }
 
     case UserActionTypes.UpsertCurrentUser: {
@@ -36,4 +39,11 @@ export function reducer(state = initialState, action: UserActions): CurrentUserS
   }
 }
 
-export const { selectIds, selectEntities, selectAll, selectTotal } = adapter.getSelectors();
+export const getSelectedUserId = (state: CurrentUserState) => state.selectedUserId;
+
+export const {
+  selectIds: selectUserIds,
+  selectEntities: selectUserEntities,
+  selectAll: selectAllUsers,
+  selectTotal: selectUserTotal
+} = adapter.getSelectors();

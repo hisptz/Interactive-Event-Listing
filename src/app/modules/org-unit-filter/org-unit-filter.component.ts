@@ -356,6 +356,9 @@ export class OrgUnitFilterComponent implements OnInit, OnDestroy {
 
   emit(e) {
     e.stopPropagation();
+    this.emitUpdatedOrg();
+  }
+  emitUpdatedOrg() {
     const mapper = {};
     this.orgUnitModel.selectedOrgUnits.forEach(function(orgUnit) {
       if (!mapper[orgUnit.level]) {

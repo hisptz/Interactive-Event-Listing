@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from './store/reducers';
 import { LoadUser } from './store/actions';
+import { Observable } from 'rxjs';
+import { User } from './models/current-user.model';
+import { selectCurrentUser } from './store';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +13,10 @@ import { LoadUser } from './store/actions';
 })
 export class AppComponent {
   title = 'EventListing';
+  public currentUser$: Observable<User>;
 
   constructor(private store: Store<AppState>) {
     this.store.dispatch(new LoadUser());
+    this.currentUser$ = store.select(selectCurrentUser);
   }
 }

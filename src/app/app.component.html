@@ -1,5 +1,7 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="container-fluid">
-  <app-menu></app-menu>
-  <app-filter-container></app-filter-container>
+  <ngx-dhis2-menu></ngx-dhis2-menu>
+  <div class="content">
+    <app-filter-container [currentUser]="currentUser$ | async"></app-filter-container>
+  </div>
 </div>
