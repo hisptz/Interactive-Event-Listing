@@ -2,8 +2,8 @@
   <div class="header_table">
     <button class="btn btn-outline-secondary downloadButton" color="primary" (click)="exportDataToExcel()" *ngIf="isAnalyticsLoaded">Download Excel</button>
   </div>
-  <ngx-datatable class="material" [rows]='rows' [columnMode]="'standard'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="50"
-    [scrollbarV]="true" *ngIf="isAnalyticsLoaded">
+  <ngx-datatable class="material" [rows]='rows' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="50"
+    [scrollbarV]="true" [scrollbarH]="true" [rowHeight]="'auto'" [reorderable]="reorderable" *ngIf="isAnalyticsLoaded">
     <ngx-datatable-column name={{header}} prop={{header}} width="130" *ngFor="let header of headers">
     </ngx-datatable-column>
   </ngx-datatable>
