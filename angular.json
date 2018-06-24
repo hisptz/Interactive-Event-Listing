@@ -27,6 +27,15 @@
               "src/styles.scss",
               {
                 "input": "node_modules/angular-tree-component/dist/angular-tree-component.css"
+              },
+              {
+                "input": "node_modules/@swimlane/ngx-datatable/release/index.css"
+              },
+              {
+                "input": "node_modules/@swimlane/ngx-datatable/release/themes/material.css"
+              },
+              {
+                "input": "node_modules/@swimlane/ngx-datatable/release/assets/icons.css"
               }
             ],
             "scripts": []

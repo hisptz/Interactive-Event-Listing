@@ -1,7 +1,10 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div class="container-fluid">
+<div class="container-fluid height100 body-container">
   <ngx-dhis2-menu></ngx-dhis2-menu>
-  <div class="content">
+  <div class="content height100 d-flex flex-column">
     <app-filter-container [currentUser]="currentUser$ | async"></app-filter-container>
+    <div class="table-container">
+      <app-event-table [analytics]="analytics$ | async" [isAnalyticsLoading]="isAnalyticsLoading$ | async" [isAnalyticsLoaded]="isAnalyticsLoaded$ | async"></app-event-table>
+    </div>
   </div>
 </div>

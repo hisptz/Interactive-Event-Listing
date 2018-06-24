@@ -1,3 +1,15 @@
 .content {
-  margin-top: 50px;
+  position: relative;
+}
+.height100 {
+  height: 100%;
+}
+
+.table-container {
+  flex: 1;
+  margin-bottom: 10px;
+}
+
+.body-container {
+  padding-top: 48px;
 }

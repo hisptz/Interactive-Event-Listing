@@ -11,15 +11,18 @@ import { rootEffects } from './store/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NgxDhis2MenuModule } from '@hisptz/ngx-dhis2-menu';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import * as filters from './modules';
 import * as fromContainers from './containers';
+import * as fromComponents from './components';
 
 @NgModule({
-  declarations: [AppComponent, ...fromContainers.containers],
+  declarations: [AppComponent, ...fromContainers.containers, ...fromComponents.components],
   imports: [
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    NgxDatatableModule,
     NgxDhis2MenuModule.forRoot(),
     ...filters.modules,
     /**
