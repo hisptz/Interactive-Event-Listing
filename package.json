@@ -1,10 +1,10 @@
 {
   "name": "event-listing",
-  "version": "0.0.0",
+  "version": "1.0.0-alpha.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "rm -rf dist && ng build --output-hashing all  --named-chunks false   --vendor-chunk  && cd dist/event-listing/ && zip -r -D EventListing.zip .",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
