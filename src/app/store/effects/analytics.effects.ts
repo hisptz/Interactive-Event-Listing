@@ -56,13 +56,15 @@ export class AnalyticsEffects {
     return Object.keys(dxObject)
       .map(key => {
         const { attributes, dataElements, programStages } = dxObject[key];
-        const attributeValues = attributes.map(({ id }) => `dimension=${id}`).join('&');
+        const attributeValues = attributes.map(({ attributeid }) => `dimension=${attributeid}`).join('&');
         const dimensions = attributes.length
           ? `dimension=ou:${ouValue}&dimension=pe:${peValue}&${attributeValues}`
           : `dimension=ou:${ouValue}&dimension=pe:${peValue}`;
         const programEventQuery = `analytics/events/query/${key}.json?${dimensions}`;
         const programUrls = programStages.map(programStageid => {
-          const prStageDeValue = dataElements[programStageid].map(({ id }) => `dimension=${id}`).join('&');
+          const prStageDeValue = dataElements[programStageid]
+            .map(({ dataelementid }) => `dimension=${dataelementid}`)
+            .join('&');
           return `${programEventQuery}&${prStageDeValue}&stage=${programStageid}`;
         });
 

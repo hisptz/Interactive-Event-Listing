@@ -77,13 +77,15 @@ export class DataFilterComponent implements OnInit, OnDestroy {
 
   initiateData() {
     this.subscription = this.dataFilterService.getPrograms().subscribe(results => {
-      const programs = results.map(({ id, name }) => ({ id, name }));
+      const programs = results.map(({ id, name, programStages }) => ({ id, name, programStages }));
       const trackedEntityAttributes = results
         .map(({ id: programid, programTrackedEntityAttributes }) =>
           programTrackedEntityAttributes.map(({ trackedEntityAttribute }) => ({
             ...trackedEntityAttribute,
             name: `[PA] ${trackedEntityAttribute.name}`,
             type: 'pa',
+            id: `${programid}.${trackedEntityAttribute.id}`,
+            attributeid: trackedEntityAttribute.id,
             programid
           }))
         )
@@ -96,6 +98,8 @@ export class DataFilterComponent implements OnInit, OnDestroy {
                 ...dataElement,
                 name: `[DE] ${dataElement.name}`,
                 type: 'de',
+                id: `${programStageid}.${dataElement.id}`,
+                dataelementid: dataElement.id,
                 programStageid,
                 programid
               }));
@@ -258,9 +262,14 @@ export class DataFilterComponent implements OnInit, OnDestroy {
       if (group.id === 'ALL') {
         currentList.push(...data.de, ...data.pa);
       } else {
-        const { id } = group;
-        const newArray = [...data.de, ...data.pa].filter(value => value.programid === id);
-        currentList.push(...newArray);
+        const { programid, group: grouid, stageid } = group;
+        let neededArray = [...data.de, ...data.pa].filter(value => value.programid === programid);
+        if (grouid === 'stage') {
+          neededArray = neededArray.filter(
+            ({ type, programStageid }) => type === 'pa' || (type === 'de' && programStageid === stageid)
+          );
+        }
+        currentList.push(...neededArray);
       }
     }
 
@@ -314,7 +323,20 @@ export class DataFilterComponent implements OnInit, OnDestroy {
     }
 
     if (_.includes(options, 'ALL') || _.includes(options, 'pr')) {
-      currentGroupList.push(...data.pr);
+      const { pr } = data;
+      const group = pr
+        .map(({ id: programid, name: programName, programStages }) => [
+          ...programStages.map(({ id: stageid, name }) => ({
+            id: `${programid}.${stageid}`,
+            programid,
+            group: 'stage',
+            stageid,
+            name: `${programName}-${name}`
+          })),
+          { id: programid, programid, group: 'ALL', name: `${programName}-ALL` }
+        ])
+        .reduce((acc, cur) => acc.concat(cur), []);
+      currentGroupList.push(...group);
     }
 
     if (_.includes(options, 'ALL') || _.includes(options, 'ds')) {

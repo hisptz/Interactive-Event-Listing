@@ -14,7 +14,10 @@ const EXCEL_EXTENSION = '.xlsx';
 export class EventTableComponent implements OnChanges {
   public headers;
   public rows;
-  constructor() {}
+  public reorderable: boolean;
+  constructor() {
+    this.reorderable = true;
+  }
 
   @Input() analytics;
   @Input() isAnalyticsLoading;

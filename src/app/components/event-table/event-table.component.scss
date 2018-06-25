@@ -4,12 +4,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: calc(100vh - 70px);
+  height: calc(100vh - 115px);
 }
 
 .ngx-datatable.scroll-vertical {
-  height: 88%;
-  width: 99%;
+  height: 100%;
+  width: 100%;
+  border: 1px solid #6c757d;
 }
 
 .downloadButton {
