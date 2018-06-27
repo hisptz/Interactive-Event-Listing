@@ -1,5 +1,5 @@
 {
-  "name": "event-listing",
+  "name": "interactive-event-listing",
   "version": "1.0.0-alpha.1",
   "scripts": {
     "ng": "ng",

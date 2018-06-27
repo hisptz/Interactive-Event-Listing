@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-alpha.1",
-  "name": "EventListing",
+  "name": "interactive-event-listing",
   "description": "EventListing",
   "launch_path": "index.html",
   "icons": {
