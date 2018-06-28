@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "rm -rf dist && ng build --prod --aot --output-hashing all  --named-chunks false --build-optimizer --vendor-chunk  && cd dist/event-listing/ && zip -r -D EventListing.zip .",
+    "build": "rm -rf dist && ng build --prod --aot --output-hashing all  --named-chunks false --build-optimizer --vendor-chunk  && cd dist/event-listing/ && zip -r -D interactive-event-listing.zip .",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

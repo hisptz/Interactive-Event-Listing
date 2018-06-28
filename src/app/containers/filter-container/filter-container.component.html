@@ -1,55 +1,53 @@
-<div class="d-flex justify-content-between flex-row-reverse  align-items-end pt-1 mb-3">
-  <div class="btn-toolbar col-8 float-right">
-    <div class="d-flex justify-content-around container-fluid">
-      <div class="button-container position-relative">
-        <button (click)="selectFilter('ORG_UNIT')" class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
-          <img src="assets/icons/period.svg" alt="" srcset="">
-          <span *ngIf="!selectedOrgUnit.length">Loading...</span>
-          <div *ngIf="selectedOrgUnit.length" class="d-inline-flex">
-            <div *ngFor="let orgunit of selectedOrgUnit; let i=index">
-              <span class="selected-item" *ngIf="i<4">{{orgunit.name}}</span>
-            </div>
+<div class="d-flex justify-content-between flex-row align-items-end mb-3 mt-2 pl-1">
+  <div class="btn-toolbar col-8 d-flex justify-content-between p-0">
+    <div class="button-container position-relative">
+      <button (click)="selectFilter('ORG_UNIT')" class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
+        <img src="assets/icons/period.svg" alt="" srcset="">
+        <span *ngIf="!selectedOrgUnit.length">Loading...</span>
+        <div *ngIf="selectedOrgUnit.length" class="d-inline-flex">
+          <div *ngFor="let orgunit of selectedOrgUnit; let i=index">
+            <span class="selected-item" *ngIf="i<4">{{orgunit.name}}</span>
           </div>
-        </button>
-        <div class="position-absolute filter-host-container" *ngIf="selectedFilter === 'ORG_UNIT'">
-          <!--org unit filter-->
-          <app-org-unit-filter [orgUnitModel]="orgUnitModel" (onOrgUnitClose)="onFilterClose($event)" [isloading]="isFilterSectionLoading$ | async"
-            [justUpdated]="isFilterSectionUpdated$ | async" (onOrgUnitUpdate)="onFilterUpdateAction($event, 'ORG_UNIT')"></app-org-unit-filter>
-          <!--end of org unit filter-->
         </div>
+      </button>
+      <div class="position-absolute filter-host-container" *ngIf="selectedFilter === 'ORG_UNIT'">
+        <!--org unit filter-->
+        <app-org-unit-filter [orgUnitModel]="orgUnitModel" (onOrgUnitClose)="onFilterClose($event)" [isloading]="isFilterSectionLoading$ | async"
+          [justUpdated]="isFilterSectionUpdated$ | async" (onOrgUnitUpdate)="onFilterUpdateAction($event, 'ORG_UNIT')"></app-org-unit-filter>
+        <!--end of org unit filter-->
       </div>
-      <div class="button-container position-relative">
-        <button (click)="selectFilter('PERIOD')" class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
-          <img src="assets/icons/period.svg" alt="" srcset="">
-          <div *ngIf="selectedPeriods.length" class="d-inline-flex">
-            <div *ngFor="let period of selectedPeriods; let i=index">
-              <span class="selected-item" *ngIf="i<3">{{period.name}}</span>
-            </div>
+    </div>
+    <div class="button-container position-relative">
+      <button (click)="selectFilter('PERIOD')" class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
+        <img src="assets/icons/period.svg" alt="" srcset="">
+        <div *ngIf="selectedPeriods.length" class="d-inline-flex">
+          <div *ngFor="let period of selectedPeriods; let i=index">
+            <span class="selected-item" *ngIf="i<3">{{period.name}}</span>
           </div>
-        </button>
-        <div class="position-absolute filter-host-container" *ngIf="selectedFilter === 'PERIOD'">
-          <!--period filter-->
-          <app-period-filter [selectedPeriods]="selectedPeriods" [periodConfig]="periodConfig" (onPeriodFilterClose)="onFilterClose($event)"
-            (onPeriodUpdate)="onFilterUpdateAction($event, 'PERIOD')" [isloading]="isFilterSectionLoading$ | async" [justUpdated]="isFilterSectionUpdated$ | async"></app-period-filter>
-          <!--end of period filter-->
         </div>
+      </button>
+      <div class="position-absolute filter-host-container" *ngIf="selectedFilter === 'PERIOD'">
+        <!--period filter-->
+        <app-period-filter [selectedPeriods]="selectedPeriods" [periodConfig]="periodConfig" (onPeriodFilterClose)="onFilterClose($event)"
+          (onPeriodUpdate)="onFilterUpdateAction($event, 'PERIOD')" [isloading]="isFilterSectionLoading$ | async" [justUpdated]="isFilterSectionUpdated$ | async"></app-period-filter>
+        <!--end of period filter-->
       </div>
-      <div class="button-container position-relative">
-        <button (click)="selectFilter('DATA')" class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
-          <img src="assets/icons/period.svg" alt="" srcset="">
-          <span class="selected-item" *ngIf="!selectedDataItems.length">None was selected</span>
-          <div *ngIf="selectedDataItems.length" class="d-inline-flex">
-            <div *ngFor="let data of selectedDataItems; let i=index">
-              <span class="selected-item" *ngIf="i<2">{{data.name}}</span>
-            </div>
+    </div>
+    <div class="button-container position-relative">
+      <button (click)="selectFilter('DATA')" class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
+        <img src="assets/icons/period.svg" alt="" srcset="">
+        <span class="selected-item" *ngIf="!selectedDataItems.length">None was selected</span>
+        <div *ngIf="selectedDataItems.length" class="d-inline-flex">
+          <div *ngFor="let data of selectedDataItems; let i=index">
+            <span class="selected-item" *ngIf="i<2">{{data.name}}</span>
           </div>
-        </button>
-        <div class="position-absolute filter-host-container" *ngIf="selectedFilter === 'DATA'">
-          <!--data filter-->
-          <app-data-filter [selectedItems]="selectedDataItems" [singleSelection]="singleSelection" (onDataFilterClose)="onFilterClose($event)"
-            (onDataUpdate)="onFilterUpdateAction($event, 'DATA')" [isloading]="isFilterSectionLoading$ | async" [justUpdated]="isFilterSectionUpdated$ | async"></app-data-filter>
-          <!--end of data filter-->
         </div>
+      </button>
+      <div class="position-absolute filter-host-container" *ngIf="selectedFilter === 'DATA'">
+        <!--data filter-->
+        <app-data-filter [selectedItems]="selectedDataItems" [singleSelection]="singleSelection" (onDataFilterClose)="onFilterClose($event)"
+          (onDataUpdate)="onFilterUpdateAction($event, 'DATA')" [isloading]="isFilterSectionLoading$ | async" [justUpdated]="isFilterSectionUpdated$ | async"></app-data-filter>
+        <!--end of data filter-->
       </div>
     </div>
   </div>
