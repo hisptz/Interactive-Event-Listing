@@ -2,12 +2,13 @@
   <div class="btn-toolbar col-8 d-flex justify-content-between p-0">
     <div class="button-container position-relative">
       <button (click)="selectFilter('ORG_UNIT')" class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
-        <img src="assets/icons/period.svg" alt="" srcset="">
+        <img src="assets/icons/tree.png" class="data-icon" alt="" srcset="">
         <span *ngIf="!selectedOrgUnit.length">Loading...</span>
         <div *ngIf="selectedOrgUnit.length" class="d-inline-flex">
           <div *ngFor="let orgunit of selectedOrgUnit; let i=index">
-            <span class="selected-item" *ngIf="i<4">{{orgunit.name}}</span>
+            <span class="selected-item" *ngIf="i<3">{{orgunit.name}}</span>
           </div>
+          <span *ngIf="selectedOrgUnit.length > 3" class="selected-item small">and {{selectedOrgUnit.length - 3}} more</span>
         </div>
       </button>
       <div class="position-absolute filter-host-container" *ngIf="selectedFilter === 'ORG_UNIT'">
@@ -19,11 +20,12 @@
     </div>
     <div class="button-container position-relative">
       <button (click)="selectFilter('PERIOD')" class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
-        <img src="assets/icons/period.svg" alt="" srcset="">
+        <img src="assets/icons/period.png" class="data-icon" alt="" srcset="">
         <div *ngIf="selectedPeriods.length" class="d-inline-flex">
           <div *ngFor="let period of selectedPeriods; let i=index">
             <span class="selected-item" *ngIf="i<3">{{period.name}}</span>
           </div>
+          <span *ngIf="selectedPeriods.length > 3" class="selected-item small">and {{selectedPeriods.length - 3}} more</span>
         </div>
       </button>
       <div class="position-absolute filter-host-container" *ngIf="selectedFilter === 'PERIOD'">
@@ -35,12 +37,13 @@
     </div>
     <div class="button-container position-relative">
       <button (click)="selectFilter('DATA')" class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
-        <img src="assets/icons/period.svg" alt="" srcset="">
+        <img src="assets/icons/data.png" class="data-icon" alt="" srcset="">
         <span class="selected-item" *ngIf="!selectedDataItems.length">None was selected</span>
         <div *ngIf="selectedDataItems.length" class="d-inline-flex">
           <div *ngFor="let data of selectedDataItems; let i=index">
             <span class="selected-item" *ngIf="i<2">{{data.name}}</span>
           </div>
+          <span *ngIf="selectedDataItems.length > 3" class="selected-item small">and {{selectedDataItems.length - 3}} more</span>
         </div>
       </button>
       <div class="position-absolute filter-host-container" *ngIf="selectedFilter === 'DATA'">
