@@ -1,6 +1,6 @@
 export const DATA_FILTER_OPTIONS: any[] = [
   {
-    name: 'Programs',
+    name: 'Event datavalues',
     prefix: 'pr',
     selected: true
   }

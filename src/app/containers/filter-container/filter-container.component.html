@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-between flex-row align-items-end mb-3 mt-2 pl-1">
+<div class="d-flex justify-content-between flex-row align-items-end mb-3 mt-2 pl-1 pr-1">
   <div class="btn-toolbar col-8 d-flex justify-content-between p-0">
     <div class="button-container position-relative">
       <button (click)="selectFilter('ORG_UNIT')" class="btn btn-sm btn-block btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center">
@@ -53,5 +53,8 @@
         <!--end of data filter-->
       </div>
     </div>
+  </div>
+  <div>
+    <button type="button" class="btn btn-outline-secondary btn-sm" *ngIf="isAnalyticsLoaded" (click)="downloadExcel()">Download Excel</button>
   </div>
 </div>

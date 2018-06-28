@@ -2,9 +2,10 @@
 <div class="height100 body-container">
   <ngx-dhis2-menu></ngx-dhis2-menu>
   <div class="content height100 d-flex flex-column">
-    <app-filter-container [currentUser]="currentUser$ | async"></app-filter-container>
-    <div class="table-container">
-      <app-event-table [analytics]="analytics$ | async" [isAnalyticsLoading]="isAnalyticsLoading$ | async" [isAnalyticsLoaded]="isAnalyticsLoaded$ | async"></app-event-table>
+    <app-filter-container [currentUser]="currentUser$ | async" [isAnalyticsLoaded]="isAnalyticsLoaded$ | async" (onDownloadClicked)="onDownloadClicked($event)"></app-filter-container>
+    <div class="table-container pl-1 pr-1">
+      <app-event-table [analytics]="analytics$ | async" [isAnalyticsLoading]="isAnalyticsLoading$ | async" [isAnalyticsLoaded]="isAnalyticsLoaded$ | async"
+        [downloadExcel]="downloadExcel"></app-event-table>
     </div>
   </div>
 </div>

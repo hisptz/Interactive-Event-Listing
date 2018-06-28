@@ -22,13 +22,17 @@ export class EventTableComponent implements OnChanges {
   @Input() analytics;
   @Input() isAnalyticsLoading;
   @Input() isAnalyticsLoaded;
+  @Input() downloadExcel;
 
   ngOnChanges(changes: SimpleChanges) {
-    const { analytics } = changes;
+    const { analytics, downloadExcel } = changes;
     if (analytics && analytics.currentValue) {
       const { headers, data } = analytics.currentValue;
       this.headers = headers;
       this.rows = data;
+    }
+    if (downloadExcel && downloadExcel.currentValue) {
+      this.exportDataToExcel();
     }
   }
 

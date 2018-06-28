@@ -1,4 +1,12 @@
-import { Component, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoadAnalytics } from '../../store/actions';
 import { Store } from '@ngrx/store';
@@ -31,6 +39,8 @@ export class FilterContainerComponent implements OnChanges {
     selectedUserOrgUnits: []
   };
   @Input() currentUser;
+  @Input() isAnalyticsLoaded: boolean;
+  @Output() onDownloadClicked: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private store: Store<AppState>) {
     this.selectedFilter = 'DATA';
@@ -100,5 +110,10 @@ export class FilterContainerComponent implements OnChanges {
 
   selectFilter(type) {
     this.selectedFilter = type;
+  }
+
+  downloadExcel() {
+    const download = true;
+    this.onDownloadClicked.emit({ download });
   }
 }
