@@ -15,8 +15,6 @@ export class AnalyticsEffects {
     ofType(AnalyticsActionTypes.LoadAnalytics),
     map((action: LoadAnalytics) => action.filterSelection),
     concatMap(({ dx, pe, ou }) => {
-      const peValue = pe.map(({ id }) => id).join('&');
-      const ouValue = ou.map(({ id }) => id).join('&');
       const dxGroupedByPrograms = this.groupBy(dx, 'programid');
       const groupedDx = Object.assign(
         {},
@@ -29,7 +27,7 @@ export class AnalyticsEffects {
           return { [key]: { attributes, dataElements, programStages } };
         })
       );
-      const queryUrls = this.constructUrl(peValue, ouValue, groupedDx);
+      const queryUrls = this.constructUrl(pe, ou, groupedDx);
       return forkJoin(queryUrls.map(url => this.http.get(url))).pipe(
         map(analytics => {
           const sanitizedAnalytics = analytics.map(analytic => standardizeAnalytics(analytic));

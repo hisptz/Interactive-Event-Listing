@@ -21,6 +21,7 @@ import { AppState } from '../../store/reducers';
 export class FilterContainerComponent implements OnChanges {
   public isFilterSectionLoading$: Observable<boolean>;
   public isFilterSectionUpdated$: Observable<boolean>;
+  public filterValues: any;
   public selectedFilter: string;
   public periodConfig: any;
   public selectedDataItems: any = [];
@@ -70,6 +71,8 @@ export class FilterContainerComponent implements OnChanges {
         type: 'Monthly'
       }
     ];
+
+    this.filterValues = { pe: this.selectedPeriods.map(({ id }) => id).join(';') };
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -77,6 +80,7 @@ export class FilterContainerComponent implements OnChanges {
     if (currentUser && currentUser.currentValue) {
       const { organisationUnits } = currentUser.currentValue;
       this.selectedOrgUnit = organisationUnits;
+      this.filterValues = { ...this.filterValues, ou: this.selectedOrgUnit.map(({ id }) => id).join(';') };
     }
   }
 
@@ -88,9 +92,11 @@ export class FilterContainerComponent implements OnChanges {
     switch (type) {
       case 'ORG_UNIT':
         this.selectedOrgUnit = event.items || [];
+        this.filterValues = { ...this.filterValues, ou: event.value };
         break;
       case 'PERIOD':
         this.selectedPeriods = event.items || [];
+        this.filterValues = { ...this.filterValues, pe: event.value };
         break;
       case 'DATA':
         this.selectedDataItems = event.itemList || [];
@@ -102,9 +108,7 @@ export class FilterContainerComponent implements OnChanges {
     const peDxAndOrgSelected =
       this.selectedDataItems.length && this.selectedPeriods.length && this.selectedOrgUnit.length;
     if (peDxAndOrgSelected) {
-      this.store.dispatch(
-        new LoadAnalytics({ dx: this.selectedDataItems, pe: this.selectedPeriods, ou: this.selectedOrgUnit })
-      );
+      this.store.dispatch(new LoadAnalytics({ dx: this.selectedDataItems, ...this.filterValues }));
     }
   }
 
